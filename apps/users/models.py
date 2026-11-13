@@ -1,6 +1,7 @@
 import uuid
+
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractUser
 
 
 class CustomUserManager(BaseUserManager):
@@ -30,12 +31,18 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
+    class Role(models.TextChoices):
+        EMPLOYER = "employer"
+        CANDIDATE = "candidate"
+
     uid = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-
-    REQUIRED_FIELDS = []
+    role = models.CharField(
+        max_length=20, choices=Role.choices, default=Role.CANDIDATE
+    )
+    REQUIRED_FIELDS = ["username", "first_name","last_name"]
     USERNAME_FIELD = "email"
     objects = CustomUserManager()
 

@@ -1,7 +1,7 @@
 from datetime import timedelta
 from pathlib import Path
-import environ
 
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, False))
@@ -122,11 +122,13 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 DJOSER = {
-    "LOGIN_FIELD": "email",  # or 'username' depending on your User model
-    "USER_CREATE_PASSWORD_RETYPE": True,
+    "LOGIN_FIELD": "email",
     "SET_PASSWORD_RETYPE": True,
     "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}/",
     "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}/",
+    "SERIALIZERS": {
+        "user_create": "apps.users.serializers.UserRegistrationSerializer",
+    },
 }
 SPECTACULAR_SETTINGS = {
     "TITLE": "Job Board API",
